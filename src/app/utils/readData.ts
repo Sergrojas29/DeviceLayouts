@@ -14,8 +14,6 @@ interface Device {
 
 }
 
-
-
 /*\
 Class `Methods;
 Instance Variables:
@@ -39,7 +37,7 @@ Process txt file -> json file
 
 */
 
-class DeviceData {
+export default class DeviceData {
     static deviceCount: number = 0;
 
     xMax: number = Number.MIN_SAFE_INTEGER
