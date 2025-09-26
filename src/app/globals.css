@@ -7,15 +7,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
-
-
-
-
-
-.Speakerstrobe, .Strobe{
- 
-
+body{
+  background-color: var(--foreground);
   
+}
+.ContainerSvg {
+  
+}
+.Speakerstrobe,
+.Strobe {
+
 }

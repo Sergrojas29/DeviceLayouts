@@ -1,0 +1,212 @@
+[
+  {
+    "xValue": -547,
+    "yValue": -99,
+    "deviceType": "SpeakerStrobe",
+    "candela": 15,
+    "watts": 0.5
+  },
+  {
+    "xValue": -85,
+    "yValue": 821,
+    "deviceType": "Strobe",
+    "candela": 75,
+    "watts": 1
+  },
+  {
+    "xValue": 289,
+    "yValue": -330,
+    "deviceType": "SpeakerStrobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": 902,
+    "yValue": 154,
+    "deviceType": "Strobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": -411,
+    "yValue": -778,
+    "deviceType": "SpeakerStrobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": 734,
+    "yValue": -209,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  },
+  {
+    "xValue": -12,
+    "yValue": 501,
+    "deviceType": "Strobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": -998,
+    "yValue": 633,
+    "deviceType": "SpeakerStrobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": 657,
+    "yValue": 101,
+    "deviceType": "Strobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": -388,
+    "yValue": 485,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  },
+  {
+    "xValue": 591,
+    "yValue": -912,
+    "deviceType": "SpeakerStrobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": -277,
+    "yValue": 72,
+    "deviceType": "Strobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": 84,
+    "yValue": 310,
+    "deviceType": "SpeakerStrobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": -605,
+    "yValue": 963,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  },
+  {
+    "xValue": 123,
+    "yValue": -456,
+    "deviceType": "SpeakerStrobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": 789,
+    "yValue": 23,
+    "deviceType": "Strobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": -91,
+    "yValue": 702,
+    "deviceType": "SpeakerStrobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": 456,
+    "yValue": -189,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  },
+  {
+    "xValue": -888,
+    "yValue": -222,
+    "deviceType": "SpeakerStrobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": -34,
+    "yValue": 94,
+    "deviceType": "Strobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": 678,
+    "yValue": 543,
+    "deviceType": "SpeakerStrobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": -111,
+    "yValue": 876,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  },
+  {
+    "xValue": 900,
+    "yValue": -300,
+    "deviceType": "SpeakerStrobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": -50,
+    "yValue": 250,
+    "deviceType": "Strobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": 777,
+    "yValue": 444,
+    "deviceType": "SpeakerStrobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": -666,
+    "yValue": 123,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  },
+  {
+    "xValue": 333,
+    "yValue": 890,
+    "deviceType": "SpeakerStrobe",
+    "candela": 30,
+    "watts": 0.5
+  },
+  {
+    "xValue": -999,
+    "yValue": 10,
+    "deviceType": "Strobe",
+    "candela": 115,
+    "watts": 1
+  },
+  {
+    "xValue": 21,
+    "yValue": 555,
+    "deviceType": "SpeakerStrobe",
+    "candela": 75,
+    "watts": 0.5
+  },
+  {
+    "xValue": 812,
+    "yValue": -654,
+    "deviceType": "Strobe",
+    "candela": 15,
+    "watts": 1
+  }
+]

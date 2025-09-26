@@ -137,7 +137,7 @@ const tp = new DeviceData();
 
 try {
     const data = await tp.processFile("../../TestData/Test.txt");
-    // console.log(data);
+    console.log(data);
     console.log(tp)
     console.log(DeviceData)
 } catch (error) {
