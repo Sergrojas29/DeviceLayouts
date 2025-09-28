@@ -1,0 +1,16 @@
+xValue	yValue	deviceType	candela	watts
+-162	-983	Strobe	15	0.5
+-189	172	Strobe	30	1.0
+-190	429	SpeakerStrobe	115	0.5
+-510	-386	Strobe	30	1.0
+155	-405	SpeakerStrobe	115	1.0
+-388	390	Strobe	115	0.5
+-586	677	SpeakerStrobe	15	0.5
+-460	-113	SpeakerStrobe	75	1.0
+-254	478	Strobe	15	1.0
+-457	-596	Strobe	75	0.5
+641	-10	Strobe	30	0.5
+-380	-373	SpeakerStrobe	30	1.0
+-115	-679	Strobe	15	1.0
+284	-946	SpeakerStrobe	75	0.5
+501	587	Strobe	30	1.0

@@ -6,7 +6,7 @@ interface SpeakerStrobeProps {
     scale: number;
 }
 
-export function SpeakerStrobe({ color, x, y, rotate, scale = 1 }: SpeakerStrobeProps) {
+export function SpeakerStrobe({ color, x, y, rotate=0, scale = 1 }: SpeakerStrobeProps) {
 
     const width = 76 * scale;
     const height = 100 * scale;

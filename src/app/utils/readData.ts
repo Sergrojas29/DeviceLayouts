@@ -1,44 +1,24 @@
-import * as fs from 'fs';
-import { resolve } from 'path';
-import * as readline from 'readline';
+/**
+ * @interface Device
+ * @description Come back and edit the description
+ */
 
 
-const args: string[] = process.argv;
-
-interface Device {
+export interface Device {
     xValue: number;
     yValue: number;
     deviceType: string;
     candela: number;
     watts: number;
-
 }
 
-/*\
-Class `Methods;
-Instance Variables:
- Static: 
-    Xmax & Ymax
-    Device Count
 
-Methods:
-
-Asynce Process Text( File Location): Object [];
-
-GetMaxMIn( Device , Min , Max) : [Max , Min];
-
-
-
-Process Text -> to Array Of Objects
-
-Gets the second arg: File Path
-Process txt file -> json file
-
-
-*/
 
 export default class DeviceData {
-    static deviceCount: number = 0;
+
+    deviceCount: number = 0;
+
+    devices: Device[] = [];
 
     xMax: number = Number.MIN_SAFE_INTEGER
     xMin: number = Number.MAX_SAFE_INTEGER
@@ -46,65 +26,65 @@ export default class DeviceData {
     yMax: number = Number.MIN_SAFE_INTEGER
     yMin: number = Number.MAX_SAFE_INTEGER
 
-
-    // [ Xmax ,Xmin Ymax , Ymin]
-    sizeCanvas: number[] = []
-
-
-    constructor() {
-
+    canvasSize = {
+        width: 0,
+        height:0
     }
 
-    async processFile(filePath: string): Promise<Device[]> {
-
-        /* 
-        Return Array of Device Object
-
-        Process File from Text Document
-        Compare Static Max , Min (x,y)
-        Count Devices
-        
-        */
-        const fsteam = fs.createReadStream(filePath);
-        let data: Device[] = [];
-
-        const rl = readline.createInterface({
-            input: fsteam,
-            crlfDelay: Infinity,
-
-        })
-
-        let lineNumber: number = 0;
 
 
+    constructor() { }
+
+    parseData(str: string): void {
+        const data = str.split(/\r?\n/)
+        let deviceData: Device[] = []
+
+        //!HEADER EDIT LATER AS EDIT THE INTERFACE
+        const header: string[] = [
+
+            "xValue",
+            "yValue",
+            "deviceType",
+            "candela",
+            "watts",
+        ]
+
+        const dynamicHeaders: { [key: number]: string } = {}
+
+        let lncount = 0;
+
+        data.forEach((line, index) => {
+            const parse = line.trim().split(/r?\t/)
 
 
-        for await (const line of rl) {
-            lineNumber++
-            if (lineNumber != 1) {
-                let words: string[] = line.split("\t");
-                let dev: Device = {
-                    xValue: Number(words[0]),
-                    yValue: Number(words[1]),
-                    deviceType: words[2] || "",
-                    candela: Number(words[3]),
-                    watts: Number(words[4])
-                };
+            //!GET HEADER INDEX
+            if (index == 0) {
+                for (let i = 0; i < parse.length; i++) {
+                    if (header.includes(parse[i])) {
+                        dynamicHeaders[i] = parse[i]
+                    }
+                }
+            } else {
+                //! PARSE DATA
+                //@ts-ignore
+                let dev: Device = {};
+                parse.forEach((data, index) => {
+                    if (Object.keys(dynamicHeaders).includes(String(index))) {
+                        const key = dynamicHeaders[index];
+                        (dev as any)[key] = data;
+                    }
+                })
 
-                this.compare(dev.xValue, dev.yValue);
 
-                data.push(dev);
-                DeviceData.deviceCount += 1;
+                //! Final Update
+                this.compare(Number(dev.xValue), Number( dev.yValue));
+                this.devices.push(dev)
+                this.deviceCount += 1;
             }
-        }
-
+        })
         this.getCanvasSize();
-
-        return data;
-
+        return;
     }
-
-
 
     compare(xValue: number, yValue: number): void {
         // Compare all values SET value to class; 
@@ -116,32 +96,8 @@ export default class DeviceData {
     }
 
     getCanvasSize(): void {
-        // [ Xmax ,Xmin Ymax , Ymin]
-        this.sizeCanvas = [
-            (this.xMax + 20),
-            (this.xMin - 20),
-            (this.yMax + 20),
-            (this.yMin - 20)
-        ]
+        this.canvasSize.width = this.xMax + Math.abs(this.xMin)
+        this.canvasSize.height = this.yMax + Math.abs(this.yMin)
     }
 
 }
-
-
-
-
-// console.log(args[2])
-// processFile(args[2]).catch( err => console.error("Error Reading file"));
-
-const tp = new DeviceData();
-
-try {
-    const data = await tp.processFile("../../TestData/Test.txt");
-    console.log(data);
-    console.log(tp)
-    console.log(DeviceData)
-} catch (error) {
-    console.log(error);
-}
-
-
