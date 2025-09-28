@@ -7,15 +7,28 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: white;
 }
 body{
   background-color: var(--foreground);
+}
+.TempContainer {
+  /* height: 100%; */
+  width: 100%;
+  /* border: solid 1pt red; */
+  /* transform: translate(999, 912) scale(.5 , .5); */
   
 }
-.ContainerSvg {
-  
+
+
+.Main{
+  display: flex;
+  justify-content: center;
 }
-.Speakerstrobe,
-.Strobe {
+
+.whore {
+  height: 100dvh;
+  /* height: auto; */
+  /* width: 100dvw; */
 
 }
