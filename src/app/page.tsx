@@ -1,20 +1,31 @@
 "use client"
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import SpeakerStrobe from '../components/Devices/SpeakerStrobe.tsx';
 import Strobe from '../components/Devices/Strobe.tsx';
 
 import DeviceData, { Device } from './utils/readData.ts';
+import Example from './notPublic/Example.tsx';
+import SimpleTable from './notPublic/SimpleTable.tsx'
+
 
 
 
 
 export default function HomePage() {
   const [devices, setDeivces] = useState<Device[]>([]);
+  const [rows, SetRows] = useState<any[][]>([])
 
   //! for temprender
   const [canvas, setCanvas] = useState({ height: 100, width: 100 })
+
+  function tempSetRows() {
+    devices.forEach((device, i) => {
+      SetRows(prev => [...prev, [device.xValue, device.yValue, device.deviceType, device.candela, device.watts , device.offSetX , device.offSetY]]);
+    });
+
+  }
 
 
   function manipluteData(e: ChangeEvent<HTMLInputElement>) {
@@ -34,26 +45,34 @@ export default function HomePage() {
   };
 
 
+  // Sample data for a product inventory table
+  const tableHeaders = ['xValue', 'yValue', 'deviceType', 'candela', 'watts', "OffSet X", "OffSet Y"];
+
+  useEffect(() => tempSetRows(), [devices])
+
 
   return (<>
+
     <input onChange={manipluteData} type="file" title="Select a file" />
 
 
-    <div style={{ height: `${canvas.height}px`, width: `${canvas.width}px`, border: 'red 1pt solid', position: 'absolute' }}>
+    <SimpleTable headers={tableHeaders} rows={rows} />
+    <SimpleTable headers={['Canvas Height', "Canvas Width"]} rows={[[canvas.height, canvas.width]]} />
 
-      <div className='whore'>
+    {devices.length != 0 && (
+      <svg width={canvas.width} height={canvas.height} xmlns="http://www.w3.org/2000/svg">
 
-        {devices && devices.map((e, i) => {
-          if (e.deviceType === 'SpeakerStrobe') {
-            return <SpeakerStrobe key={i} color='green' x={e.xValue} y={e.yValue} />
-          } else if (e.deviceType === 'Strobe') {
-            return <Strobe key={i} color='green' x={e.xValue} y={e.yValue} />
-          }
+        {devices.map((e, i)=>{
+          return (<circle onClick={()=>console.log(e.xValue, e.yValue)} key={i} cx={e.offSetX} cy={e.offSetY} r="5" fill="red" />)
         })}
+    
+      </svg>
+    )}
 
-      </div>
 
-    </div>
 
-  </>);
+
+  </>
+  );
 }
+

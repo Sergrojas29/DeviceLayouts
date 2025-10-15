@@ -9,21 +9,10 @@ import SpeakerStrobe from "../../components/Devices/SpeakerStrobe.tsx";
 
 export default function Example() {
   return (
-    <div className="relative border-4 border-dashed border-gray-400 w-full h-[500px] overflow-hidden">
-      <TransformWrapper
-        limitToBounds={false} // This is the key change!
-        minScale={0.1}
-        maxScale={100}
-        
-      >
+    <div className="full">
+      <TransformWrapper>
         <TransformComponent>
-          <div className="w-[1500px] h-[1000px] bg-gray-200" style={{border: '1px solid red'}}>
-            {/* The content, which is larger than the container */}
-            <h2 className="text-3xl font-bold p-8">Large Content</h2>
-            <p className="p-8">
-              This content is much bigger than its parent container, allowing you to pan and zoom freely in any direction.
-            </p>
-          </div>
+          <canvas className="myCanvas" width="400000" height="400000"></canvas>
         </TransformComponent>
       </TransformWrapper>
     </div>

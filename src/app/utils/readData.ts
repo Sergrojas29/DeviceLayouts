@@ -10,8 +10,20 @@ export interface Device {
     deviceType: string;
     candela: number;
     watts: number;
+    offSetX: number;
+    offSetY: number;
 }
 
+
+
+/**
+ * Class Method to handle device data input from a txt file
+ * to object
+ * @method parseData
+ * @method compare
+ * @method getCanvasSize 
+ * @method setOffset
+ */
 
 
 export default class DeviceData {
@@ -28,7 +40,8 @@ export default class DeviceData {
 
     canvasSize = {
         width: 0,
-        height:0
+        height:0,
+        offset:0,
     }
 
 
@@ -51,7 +64,6 @@ export default class DeviceData {
 
         const dynamicHeaders: { [key: number]: string } = {}
 
-        let lncount = 0;
 
         data.forEach((line, index) => {
             const parse = line.trim().split(/r?\t/)
@@ -83,11 +95,15 @@ export default class DeviceData {
             }
         })
         this.getCanvasSize();
+        this.setOffset();
         return;
     }
 
     compare(xValue: number, yValue: number): void {
-        // Compare all values SET value to class; 
+        /**
+        *@description Compare all values SET value to class;
+        */
+
 
         this.xMax = xValue > this.xMax ? xValue : this.xMax
         this.xMin = xValue < this.xMin ? xValue : this.xMin
@@ -98,6 +114,15 @@ export default class DeviceData {
     getCanvasSize(): void {
         this.canvasSize.width = this.xMax + Math.abs(this.xMin)
         this.canvasSize.height = this.yMax + Math.abs(this.yMin)
+    }
+
+    setOffset():void {
+        const xOffset = Math.abs(this.xMin);
+        const yOffset = Math.abs(this.yMin);
+        this.devices.forEach((device) => {
+            device.offSetX = Number(device.xValue) + xOffset;
+            device.offSetY = Number(device.yValue) + yOffset;
+        });
     }
 
 }
