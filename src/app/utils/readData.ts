@@ -3,18 +3,21 @@
  * @description Come back and edit the description
  */
 
-
 export interface Device {
-    xValue: number;
-    yValue: number;
-    deviceType: string;
-    candela: number;
-    watts: number;
+    HANDLE: string;
+    PID: string;
+    CD: number;
+    WP: string;
+    NACTAG: string;
+    DESCRIPTION: string;
+    X_COORDINATE: number;
+    Y_COORDINATE: number;
+    CEIL: string;
+    SPEAKTAG: string;
+    WATT: string;
     offSetX: number;
     offSetY: number;
 }
-
-
 
 /**
  * Class Method to handle device data input from a txt file
@@ -27,21 +30,28 @@ export interface Device {
 
 
 export default class DeviceData {
-
     deviceCount: number = 0;
-
     devices: Device[] = [];
-
-    xMax: number = Number.MIN_SAFE_INTEGER
-    xMin: number = Number.MAX_SAFE_INTEGER
-
-    yMax: number = Number.MIN_SAFE_INTEGER
-    yMin: number = Number.MAX_SAFE_INTEGER
 
     canvasSize = {
         width: 0,
-        height:0,
-        offset:0,
+        height: 0,
+        offset: 0,
+        xMax: Number.MIN_SAFE_INTEGER,
+        xMin: Number.MAX_SAFE_INTEGER,
+        yMax: Number.MIN_SAFE_INTEGER,
+        yMin: Number.MAX_SAFE_INTEGER,
+    }
+
+    viewport ={
+        x:0,
+        y:0,
+        height: 0,
+        width:0,
+        xMax: Number.MIN_SAFE_INTEGER,
+        xMin: Number.MAX_SAFE_INTEGER,
+        yMax: Number.MIN_SAFE_INTEGER,
+        yMin: Number.MAX_SAFE_INTEGER,
     }
 
 
@@ -50,17 +60,29 @@ export default class DeviceData {
 
     parseData(str: string): void {
         const data = str.split(/\r?\n/)
-        let deviceData: Device[] = []
 
         //!HEADER EDIT LATER AS EDIT THE INTERFACE
         const header: string[] = [
+            "HANDLE",
+            "CEIL",
+            "DESCRIPTION",
+            "NACTAG",
+            "WP",
+            'CD',
+            'X_COORDINATE',
+            'Y_COORDINATE',
+            'offSetX',
+            'offSetY',
+            "PID",
+            "SPEAKTAG",
+            "WATT",
 
-            "xValue",
-            "yValue",
-            "deviceType",
-            "candela",
-            "watts",
         ]
+        const headerNumbers: string[] = [
+            'CD',
+            'X_COORDINATE',
+            'Y_COORDINATE',
+        ];
 
         const dynamicHeaders: { [key: number]: string } = {}
 
@@ -81,15 +103,20 @@ export default class DeviceData {
                 //@ts-ignore
                 let dev: Device = {};
                 parse.forEach((data, index) => {
+                    //* looks for the column number if included from header it will be added based on index
                     if (Object.keys(dynamicHeaders).includes(String(index))) {
                         const key = dynamicHeaders[index];
-                        (dev as any)[key] = data;
+                        if (headerNumbers.includes(key)){
+                            (dev as any)[key] = Number(data);
+                        }else{
+                            (dev as any)[key] = data;
+                        }
                     }
                 })
 
 
                 //! Final Update
-                this.compare(Number(dev.xValue), Number( dev.yValue));
+                this.compare(Number(dev.X_COORDINATE), Number(dev.Y_COORDINATE));
                 this.devices.push(dev)
                 this.deviceCount += 1;
             }
@@ -104,25 +131,36 @@ export default class DeviceData {
         *@description Compare all values SET value to class;
         */
 
-
-        this.xMax = xValue > this.xMax ? xValue : this.xMax
-        this.xMin = xValue < this.xMin ? xValue : this.xMin
-        this.yMax = yValue > this.yMax ? yValue : this.yMax
-        this.yMin = yValue < this.yMin ? yValue : this.yMin
+        // get Max / Min     |   conditional statement         | update |    keep
+        this.canvasSize.xMax = (xValue > this.canvasSize.xMax) ? xValue : this.canvasSize.xMax
+        this.canvasSize.xMin = (xValue < this.canvasSize.xMin) ? xValue : this.canvasSize.xMin
+        this.canvasSize.yMax = (yValue > this.canvasSize.yMax) ? yValue : this.canvasSize.yMax
+        this.canvasSize.yMin = (yValue < this.canvasSize.yMin) ? yValue : this.canvasSize.yMin
     }
 
     getCanvasSize(): void {
-        this.canvasSize.width = this.xMax + Math.abs(this.xMin)
-        this.canvasSize.height = this.yMax + Math.abs(this.yMin)
+        this.canvasSize.width = this.canvasSize.xMax + Math.abs(this.canvasSize.xMin)
+        this.canvasSize.height = this.canvasSize.yMax + Math.abs(this.canvasSize.yMin)
     }
 
-    setOffset():void {
-        const xOffset = Math.abs(this.xMin);
-        const yOffset = Math.abs(this.yMin);
+    setOffset(): void {
+        const xOffset = Math.abs(this.canvasSize.xMin);
+        const yOffset = Math.abs(this.canvasSize.yMin);
         this.devices.forEach((device) => {
-            device.offSetX = Number(device.xValue) + xOffset;
-            device.offSetY = Number(device.yValue) + yOffset;
+            device.offSetX = device.X_COORDINATE + xOffset;
+            device.offSetY = device.Y_COORDINATE + yOffset;
+            
+
+
         });
+
+    }
+
+    setViewport():void{
+        this.viewport.x = 0;
+        this.viewport.y = 0;
+        this.viewport.x = 0;
+        this.viewport.x = 0;
     }
 
 }

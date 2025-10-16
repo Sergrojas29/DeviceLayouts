@@ -22,7 +22,7 @@ export default function HomePage() {
 
   function tempSetRows() {
     devices.forEach((device, i) => {
-      SetRows(prev => [...prev, [device.xValue, device.yValue, device.deviceType, device.candela, device.watts , device.offSetX , device.offSetY]]);
+      SetRows(prev => [...prev, [device.X_COORDINATE, device.Y_COORDINATE, device.PID, device.CD, device.WATT , device.offSetX , device.offSetY]]);
     });
 
   }
@@ -46,7 +46,7 @@ export default function HomePage() {
 
 
   // Sample data for a product inventory table
-  const tableHeaders = ['xValue', 'yValue', 'deviceType', 'candela', 'watts', "OffSet X", "OffSet Y"];
+  const tableHeaders = ['X_COORDINATE', 'Y_COORDINATE', 'PID', 'CD', 'WATT', "OffSet X", "OffSet Y"];
 
   useEffect(() => tempSetRows(), [devices])
 
@@ -60,12 +60,12 @@ export default function HomePage() {
     <SimpleTable headers={['Canvas Height', "Canvas Width"]} rows={[[canvas.height, canvas.width]]} />
 
     {devices.length != 0 && (
-      <svg width={canvas.width} height={canvas.height} xmlns="http://www.w3.org/2000/svg">
+      <svg width={100000} height={100000} xmlns="http://www.w3.org/2000/svg">
 
         {devices.map((e, i)=>{
-          return (<circle onClick={()=>console.log(e.xValue, e.yValue)} key={i} cx={e.offSetX} cy={e.offSetY} r="5" fill="red" />)
+          return (<circle onClick={()=>console.log(e.X_COORDINATE, e.Y_COORDINATE)} key={i} cx={e.offSetX} cy={e.offSetY} r="5" fill="red" />)
         })}
-    
+        <rect width={canvas.width} height={canvas.height} x="0" y="0"stroke="blue" fill='none'/>
       </svg>
     )}
 
