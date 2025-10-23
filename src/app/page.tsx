@@ -1,6 +1,7 @@
 "use client"
 
 import { ChangeEvent, useEffect, useState } from 'react';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 import SpeakerStrobe from '../components/Devices/SpeakerStrobe.tsx';
 import Strobe from '../components/Devices/Strobe.tsx';
@@ -18,11 +19,11 @@ export default function HomePage() {
   const [rows, SetRows] = useState<any[][]>([])
 
   //! for temprender
-  const [canvas, setCanvas] = useState({ height: 100, width: 100 })
+  const [viewport, setViewport] = useState({ height: 100, width: 100, xMin: 0, yMin: 0 })
 
   function tempSetRows() {
     devices.forEach((device, i) => {
-      SetRows(prev => [...prev, [device.X_COORDINATE, device.Y_COORDINATE, device.PID, device.CD, device.WATT , device.offSetX , device.offSetY]]);
+      SetRows(prev => [...prev, [device.X_COORDINATE, device.Y_COORDINATE, device.PID, device.CD, device.WATT]]);
     });
 
   }
@@ -37,7 +38,7 @@ export default function HomePage() {
         const proccessor = new DeviceData;
         proccessor.parseData(reader.result as string);
         setDeivces(proccessor.devices)
-        setCanvas(prev => ({ ...prev, height: proccessor.canvasSize.height, width: proccessor.canvasSize.width }))
+        setViewport(prev => ({ ...prev, height: proccessor.viewport.height, width: proccessor.viewport.width, xMin: proccessor.viewport.xMin, yMin: proccessor.viewport.yMin, }))
         console.log(proccessor)
       }
       reader.readAsText(selectedFile)
@@ -46,7 +47,7 @@ export default function HomePage() {
 
 
   // Sample data for a product inventory table
-  const tableHeaders = ['X_COORDINATE', 'Y_COORDINATE', 'PID', 'CD', 'WATT', "OffSet X", "OffSet Y"];
+  const tableHeaders = ['X_COORDINATE', 'Y_COORDINATE', 'PID', 'CD', 'WATT'];
 
   useEffect(() => tempSetRows(), [devices])
 
@@ -57,17 +58,25 @@ export default function HomePage() {
 
 
     <SimpleTable headers={tableHeaders} rows={rows} />
-    <SimpleTable headers={['Canvas Height', "Canvas Width"]} rows={[[canvas.height, canvas.width]]} />
+    <SimpleTable headers={['viewport Height', "viewport Width"]} rows={[[viewport.height, viewport.width]]} />
 
-    {devices.length != 0 && (
-      <svg width={100000} height={100000} xmlns="http://www.w3.org/2000/svg">
+    <TransformWrapper initialScale={5} initialPositionX={14391} initialPositionY={13382}>
+      <TransformComponent >
+        {devices.length != 0 && (
+          <svg width={25300 + 50} height={14391 + 50} xmlns="http://www.w3.org/2000/svg">
 
-        {devices.map((e, i)=>{
-          return (<circle onClick={()=>console.log(e.X_COORDINATE, e.Y_COORDINATE)} key={i} cx={e.offSetX} cy={e.offSetY} r="5" fill="red" />)
-        })}
-        <rect width={canvas.width} height={canvas.height} x="0" y="0"stroke="blue" fill='none'/>
-      </svg>
-    )}
+            {devices.map((e, i) => {
+              return (<circle onClick={() => console.log(e.X_COORDINATE, e.Y_COORDINATE)} key={i} cx={e.X_COORDINATE} cy={e.Y_COORDINATE} r="5" fill="red" />)
+            })}
+            <line x1="0" y1="0" x2={viewport.xMin} y2={viewport.yMin} stroke='red' strokeWidth={3} />
+            <rect width={viewport.width} height={viewport.height} x={viewport.xMin} y={viewport.yMin} stroke="blue" fill='none' />
+
+
+          </svg>
+        )}
+      </TransformComponent>
+    </TransformWrapper>
+
 
 
 

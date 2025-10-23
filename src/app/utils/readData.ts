@@ -15,8 +15,6 @@ export interface Device {
     CEIL: string;
     SPEAKTAG: string;
     WATT: string;
-    offSetX: number;
-    offSetY: number;
 }
 
 /**
@@ -24,7 +22,7 @@ export interface Device {
  * to object
  * @method parseData
  * @method compare
- * @method getCanvasSize 
+ * @method setViewport
  * @method setOffset
  */
 
@@ -33,27 +31,15 @@ export default class DeviceData {
     deviceCount: number = 0;
     devices: Device[] = [];
 
-    canvasSize = {
+    viewport = {
         width: 0,
         height: 0,
-        offset: 0,
-        xMax: Number.MIN_SAFE_INTEGER,
+
+        xMax: 0,
         xMin: Number.MAX_SAFE_INTEGER,
-        yMax: Number.MIN_SAFE_INTEGER,
+        yMax: 0,
         yMin: Number.MAX_SAFE_INTEGER,
     }
-
-    viewport ={
-        x:0,
-        y:0,
-        height: 0,
-        width:0,
-        xMax: Number.MIN_SAFE_INTEGER,
-        xMin: Number.MAX_SAFE_INTEGER,
-        yMax: Number.MIN_SAFE_INTEGER,
-        yMin: Number.MAX_SAFE_INTEGER,
-    }
-
 
 
     constructor() { }
@@ -107,7 +93,8 @@ export default class DeviceData {
                     if (Object.keys(dynamicHeaders).includes(String(index))) {
                         const key = dynamicHeaders[index];
                         if (headerNumbers.includes(key)){
-                            (dev as any)[key] = Number(data);
+                            //!SET TO AN ABSOLUTE VALUE FOR RENDERING ON SVG*****
+                            (dev as any)[key] = Math.abs(Number(data));
                         }else{
                             (dev as any)[key] = data;
                         }
@@ -121,8 +108,9 @@ export default class DeviceData {
                 this.deviceCount += 1;
             }
         })
-        this.getCanvasSize();
-        this.setOffset();
+
+
+        this.setViewport()
         return;
     }
 
@@ -130,37 +118,16 @@ export default class DeviceData {
         /**
         *@description Compare all values SET value to class;
         */
-
-        // get Max / Min     |   conditional statement         | update |    keep
-        this.canvasSize.xMax = (xValue > this.canvasSize.xMax) ? xValue : this.canvasSize.xMax
-        this.canvasSize.xMin = (xValue < this.canvasSize.xMin) ? xValue : this.canvasSize.xMin
-        this.canvasSize.yMax = (yValue > this.canvasSize.yMax) ? yValue : this.canvasSize.yMax
-        this.canvasSize.yMin = (yValue < this.canvasSize.yMin) ? yValue : this.canvasSize.yMin
-    }
-
-    getCanvasSize(): void {
-        this.canvasSize.width = this.canvasSize.xMax + Math.abs(this.canvasSize.xMin)
-        this.canvasSize.height = this.canvasSize.yMax + Math.abs(this.canvasSize.yMin)
-    }
-
-    setOffset(): void {
-        const xOffset = Math.abs(this.canvasSize.xMin);
-        const yOffset = Math.abs(this.canvasSize.yMin);
-        this.devices.forEach((device) => {
-            device.offSetX = device.X_COORDINATE + xOffset;
-            device.offSetY = device.Y_COORDINATE + yOffset;
-            
-
-
-        });
-
+        this.viewport.xMax = (xValue > this.viewport.xMax) ? xValue : this.viewport.xMax
+        this.viewport.xMin = (xValue < this.viewport.xMin) ? xValue : this.viewport.xMin
+        this.viewport.yMax = (yValue > this.viewport.yMax) ? yValue : this.viewport.yMax
+        this.viewport.yMin = (yValue < this.viewport.yMin) ? yValue : this.viewport.yMin
     }
 
     setViewport():void{
-        this.viewport.x = 0;
-        this.viewport.y = 0;
-        this.viewport.x = 0;
-        this.viewport.x = 0;
+        this.viewport.height = this.viewport.yMax - this.viewport.yMin;
+        this.viewport.width = this.viewport.xMax - this.viewport.xMin;
+
     }
 
 }
