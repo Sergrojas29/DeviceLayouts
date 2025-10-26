@@ -35,9 +35,9 @@ export default class DeviceData {
         width: 0,
         height: 0,
 
-        xMax: 0,
+        xMax: Number.MIN_SAFE_INTEGER,
         xMin: Number.MAX_SAFE_INTEGER,
-        yMax: 0,
+        yMax: Number.MIN_SAFE_INTEGER,
         yMin: Number.MAX_SAFE_INTEGER,
     }
 
@@ -57,8 +57,6 @@ export default class DeviceData {
             'CD',
             'X_COORDINATE',
             'Y_COORDINATE',
-            'offSetX',
-            'offSetY',
             "PID",
             "SPEAKTAG",
             "WATT",
@@ -92,10 +90,10 @@ export default class DeviceData {
                     //* looks for the column number if included from header it will be added based on index
                     if (Object.keys(dynamicHeaders).includes(String(index))) {
                         const key = dynamicHeaders[index];
-                        if (headerNumbers.includes(key)){
+                        if (headerNumbers.includes(key)) {
                             //!SET TO AN ABSOLUTE VALUE FOR RENDERING ON SVG*****
-                            (dev as any)[key] = Math.abs(Number(data));
-                        }else{
+                            (dev as any)[key] = Number(data);
+                        } else {
                             (dev as any)[key] = data;
                         }
                     }
@@ -107,6 +105,7 @@ export default class DeviceData {
                 this.devices.push(dev)
                 this.deviceCount += 1;
             }
+            
         })
 
 
@@ -118,16 +117,24 @@ export default class DeviceData {
         /**
         *@description Compare all values SET value to class;
         */
-        this.viewport.xMax = (xValue > this.viewport.xMax) ? xValue : this.viewport.xMax
-        this.viewport.xMin = (xValue < this.viewport.xMin) ? xValue : this.viewport.xMin
-        this.viewport.yMax = (yValue > this.viewport.yMax) ? yValue : this.viewport.yMax
-        this.viewport.yMin = (yValue < this.viewport.yMin) ? yValue : this.viewport.yMin
+        this.viewport.xMax = Math.max(xValue , this.viewport.xMax )
+        this.viewport.xMin = Math.min(xValue , this.viewport.xMin )
+        this.viewport.yMax = Math.max(yValue , this.viewport.yMax )
+        this.viewport.yMin = Math.min(yValue , this.viewport.yMin )
     }
 
-    setViewport():void{
-        this.viewport.height = this.viewport.yMax - this.viewport.yMin;
-        this.viewport.width = this.viewport.xMax - this.viewport.xMin;
+    setViewport(): void {
+        const YMAX = this.viewport.yMax;
+        const YMIN = this.viewport.yMin;
+
+        const XMAX = this.viewport.xMax;
+        const XMIN = this.viewport.xMin;
+
+        this.viewport.height = YMAX - YMIN;
+        this.viewport.width = XMAX - XMIN;
 
     }
+
+
 
 }

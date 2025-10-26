@@ -33,9 +33,10 @@ body{
   
 }
 
-.myCanvas{
+.svgContainer{
 
-  
+  padding: 100;
+  overflow: visible;
   background-color: azure;
 }
 

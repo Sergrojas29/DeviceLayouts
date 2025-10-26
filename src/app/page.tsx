@@ -49,7 +49,7 @@ export default function HomePage() {
   // Sample data for a product inventory table
   const tableHeaders = ['X_COORDINATE', 'Y_COORDINATE', 'PID', 'CD', 'WATT'];
 
-  useEffect(() => tempSetRows(), [devices])
+
 
 
   return (<>
@@ -58,24 +58,6 @@ export default function HomePage() {
 
 
     <SimpleTable headers={tableHeaders} rows={rows} />
-    <SimpleTable headers={['viewport Height', "viewport Width"]} rows={[[viewport.height, viewport.width]]} />
-
-    <TransformWrapper initialScale={5} initialPositionX={14391} initialPositionY={13382}>
-      <TransformComponent >
-        {devices.length != 0 && (
-          <svg width={25300 + 50} height={14391 + 50} xmlns="http://www.w3.org/2000/svg">
-
-            {devices.map((e, i) => {
-              return (<circle onClick={() => console.log(e.X_COORDINATE, e.Y_COORDINATE)} key={i} cx={e.X_COORDINATE} cy={e.Y_COORDINATE} r="5" fill="red" />)
-            })}
-            <line x1="0" y1="0" x2={viewport.xMin} y2={viewport.yMin} stroke='red' strokeWidth={3} />
-            <rect width={viewport.width} height={viewport.height} x={viewport.xMin} y={viewport.yMin} stroke="blue" fill='none' />
-
-
-          </svg>
-        )}
-      </TransformComponent>
-    </TransformWrapper>
 
 
 
