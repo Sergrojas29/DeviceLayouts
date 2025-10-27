@@ -3,10 +3,11 @@ interface SpeakerStrobeProps {
     X: number;
     Y: number;
     scale: number;
+    handle: string;
 
 }
 
-export function SpeakerStrobe({ color, X, Y, scale = 1 }: SpeakerStrobeProps) {
+export function SpeakerStrobe({handle, color, X, Y, scale = 1 }: SpeakerStrobeProps) {
 
     const UNIT = 10 * scale;
     const SIZE = UNIT * 2.5;
@@ -27,7 +28,7 @@ export function SpeakerStrobe({ color, X, Y, scale = 1 }: SpeakerStrobeProps) {
 
     return (
 
-        <g>
+        <g onClick={()=> {console.log(handle)}}>
             <line x1={X - UNIT} y1={Y - UNIT} x2={X + UNIT} y2={Y + UNIT} style={Strobestyle.st0} />
             <line x1={X + UNIT} y1={Y - UNIT} x2={X - UNIT} y2={Y + UNIT} style={Strobestyle.st0}/>
             <rect x={X - HALF} y={Y - HALF} width={SIZE} height={SIZE}    style={Strobestyle.st0}/>

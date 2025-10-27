@@ -1,69 +1,52 @@
 "use client"
 
-import { ChangeEvent, useEffect, useState } from 'react';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-
-import SpeakerStrobe from '../components/Devices/SpeakerStrobe.tsx';
-import Strobe from '../components/Devices/Strobe.tsx';
-
-import DeviceData, { Device } from './utils/readData.ts';
-import Example from './notPublic/Example.tsx';
-import SimpleTable from './notPublic/SimpleTable.tsx'
-
-
-
-
+import Canvas from "@/components/Canvas.tsx";
+import useDeviceStore from '../store/deviceStore.ts'
 
 export default function HomePage() {
-  const [devices, setDeivces] = useState<Device[]>([]);
-  const [rows, SetRows] = useState<any[][]>([])
 
-  //! for temprender
-  const [viewport, setViewport] = useState({ height: 100, width: 100, xMin: 0, yMin: 0 })
+  const devices = useDeviceStore((state) => state.deviceMap);
+  const setDevices = useDeviceStore((state) => state.setDevices);
+  const handleFileUpload = useDeviceStore((state) => state.handleFileUpload);
 
-  function tempSetRows() {
-    devices.forEach((device, i) => {
-      SetRows(prev => [...prev, [device.X_COORDINATE, device.Y_COORDINATE, device.PID, device.CD, device.WATT]]);
-    });
 
+  const styleSection: {
+    main: React.CSSProperties,
+    canvas: React.CSSProperties,
+    table: React.CSSProperties
+  } = {
+    main: {
+      display: 'flex',
+      flexDirection: "row",
+      width: '100%',
+      height: '100%',
+    },
+    canvas: {
+      width: '70%',
+      height: '100%',
+      border: 'solid red 1pt'
+    },
+    table: {
+      height: '100%',
+      border: 'solid blue 1pt',
+      width: '30%'
+    }
   }
 
 
-  function manipluteData(e: ChangeEvent<HTMLInputElement>) {
-    const selectedFile = e.target.files?.[0];
+  return (
+    <main style={styleSection.main}>
+      <section style={styleSection.canvas}>
+        
+        <input onChange={handleFileUpload} type="file" name="textFile" id="input" placeholder='.txt files only' />
+        
+        {/* <Canvas /> */}
+      </section>
+      <section style={styleSection.table}>
 
-    if (selectedFile && selectedFile.type == "text/plain") {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const proccessor = new DeviceData;
-        proccessor.parseData(reader.result as string);
-        setDeivces(proccessor.devices)
-        setViewport(prev => ({ ...prev, height: proccessor.viewport.height, width: proccessor.viewport.width, xMin: proccessor.viewport.xMin, yMin: proccessor.viewport.yMin, }))
-        console.log(proccessor)
-      }
-      reader.readAsText(selectedFile)
-    }
-  };
+      </section>
 
-
-  // Sample data for a product inventory table
-  const tableHeaders = ['X_COORDINATE', 'Y_COORDINATE', 'PID', 'CD', 'WATT'];
-
-
-
-
-  return (<>
-
-    <input onChange={manipluteData} type="file" title="Select a file" />
-
-
-    <SimpleTable headers={tableHeaders} rows={rows} />
-
-
-
-
-
-  </>
+    </main>
   );
 }
 

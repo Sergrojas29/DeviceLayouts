@@ -15,6 +15,13 @@ export interface Device {
     CEIL: string;
     SPEAKTAG: string;
     WATT: string;
+    //! FOR MANIPLULATION
+    NacGroup: number;
+    NacNumber: number;
+}
+
+export interface HandleDevice{
+    
 }
 
 /**
@@ -62,36 +69,47 @@ export default class DeviceData {
             "WATT",
 
         ]
-        const headerNumbers: string[] = [
+        const HEADERS_TO_FORMAT_TO_NUMBER: string[] = [
             'CD',
             'X_COORDINATE',
             'Y_COORDINATE',
         ];
 
-        const dynamicHeaders: { [key: number]: string } = {}
+        const DYNAMIC_HEADER_OBJ: { [key: number]: string } = {}
 
 
         data.forEach((line, index) => {
-            const parse = line.trim().split(/r?\t/)
+            const PARSED_LINE = line.trim().split(/r?\t/)
 
 
             //!GET HEADER INDEX
             if (index == 0) {
-                for (let i = 0; i < parse.length; i++) {
-                    if (header.includes(parse[i])) {
-                        dynamicHeaders[i] = parse[i]
+                const LENGTH = PARSED_LINE.length
+
+                for (let i = 0; i < LENGTH; i++) {
+
+                    const HEADER_VALUE = PARSED_LINE[i]
+                    const INCLUDED_HEADERS: boolean = header.includes(HEADER_VALUE)
+
+                    if (INCLUDED_HEADERS) {
+                        DYNAMIC_HEADER_OBJ[i] = HEADER_VALUE
                     }
                 }
             } else {
-                //! PARSE DATA
+                
                 //@ts-ignore
                 let dev: Device = {};
-                parse.forEach((data, index) => {
-                    //* looks for the column number if included from header it will be added based on index
-                    if (Object.keys(dynamicHeaders).includes(String(index))) {
-                        const key = dynamicHeaders[index];
-                        if (headerNumbers.includes(key)) {
-                            //!SET TO AN ABSOLUTE VALUE FOR RENDERING ON SVG*****
+                const DYANMIC_HEADER_INDEX_ARRAY = Object.keys(DYNAMIC_HEADER_OBJ)
+
+                PARSED_LINE.forEach((data, index) => {
+                    const INDEX = String(index)
+                    const INCLUDED :boolean = DYANMIC_HEADER_INDEX_ARRAY.includes(INDEX)
+
+                    if (INCLUDED) {
+                        const key = DYNAMIC_HEADER_OBJ[index];
+                        const TO_NUMBER = HEADERS_TO_FORMAT_TO_NUMBER.includes(key)
+
+                        if (TO_NUMBER) {
                             (dev as any)[key] = Number(data);
                         } else {
                             (dev as any)[key] = data;
@@ -102,10 +120,14 @@ export default class DeviceData {
 
                 //! Final Update
                 this.compare(Number(dev.X_COORDINATE), Number(dev.Y_COORDINATE));
-                this.devices.push(dev)
+
+                //!Might Need to be refactored
+                const updateDevice : Device = this.setGroupAndNumber_NAC_ONLY_FOR_NOW(dev.NACTAG , dev.SPEAKTAG, dev);
+
+                this.devices.push(updateDevice)
                 this.deviceCount += 1;
             }
-            
+
         })
 
 
@@ -117,10 +139,10 @@ export default class DeviceData {
         /**
         *@description Compare all values SET value to class;
         */
-        this.viewport.xMax = Math.max(xValue , this.viewport.xMax )
-        this.viewport.xMin = Math.min(xValue , this.viewport.xMin )
-        this.viewport.yMax = Math.max(yValue , this.viewport.yMax )
-        this.viewport.yMin = Math.min(yValue , this.viewport.yMin )
+        this.viewport.xMax = Math.max(xValue, this.viewport.xMax)
+        this.viewport.xMin = Math.min(xValue, this.viewport.xMin)
+        this.viewport.yMax = Math.max(yValue, this.viewport.yMax)
+        this.viewport.yMin = Math.min(yValue, this.viewport.yMin)
     }
 
     setViewport(): void {
@@ -132,6 +154,21 @@ export default class DeviceData {
 
         this.viewport.height = YMAX - YMIN;
         this.viewport.width = XMAX - XMIN;
+
+    }
+
+    setGroupAndNumber_NAC_ONLY_FOR_NOW(NACTAG : string , SPEAKTAG : string , Dev: Device): Device {
+        const regex = /:([A-Z])(\d+)-(\d+)/;
+        const NAC_REGEX = NACTAG.match(regex);
+
+        if( NACTAG === "<>" && SPEAKTAG === "<>") return Dev;
+        
+        if(NAC_REGEX){
+            Dev.NacGroup = Number(NAC_REGEX[2])
+            Dev.NacNumber = Number(NAC_REGEX[3])
+        }
+        //!ADD SPEAKER AND IDNET LATER
+        return Dev;
 
     }
 
