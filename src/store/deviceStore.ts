@@ -5,14 +5,16 @@ import { ChangeEvent } from 'react';
 
 
 
-export type DeviceMap = Record<string, Device>;
+export interface DeviceMap {
+    [key: string]: Partial<Device>;
+}
 
 interface DeviceState {
     deviceMap: DeviceMap;
     setDeviceMap(DeviceMap: DeviceMap): void;
     handleFileUpload: (event: ChangeEvent<HTMLInputElement>) => void;
     parseData: (fileContent: string) => void;
-    setGroupAndNumber_NAC_ONLY_FOR_NOW(NACTAG : string , SPEAKTAG : string , Dev: Device): Device;
+    setGroupAndNumber_NAC_ONLY_FOR_NOW(device: Partial<Device>): Device;
 
 }
 
@@ -63,7 +65,7 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
 
 
         data.forEach((line, index) => {
-            const PARSED_LINE = line.trim().split(/r?\t/)
+            const PARSED_LINE = line.trim().split(/\r?\t/)
 
 
             //!GET HEADER INDEX
@@ -81,36 +83,39 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
                 }
             } else {
 
-                //@ts-ignore
-                let dev: Device = {};
-                const DYANMIC_HEADER_INDEX_ARRAY = Object.keys(DYNAMIC_HEADER_OBJ)
+                let tempDevice: Partial<Device & any> = {};
+                const DYNAMIC_HEADER_INDEX_ARRAY = Object.keys(DYNAMIC_HEADER_OBJ)
 
-                PARSED_LINE.forEach((data, index) => {
+                PARSED_LINE.forEach((value, index) => {
                     const INDEX = String(index)
-                    const INCLUDED: boolean = DYANMIC_HEADER_INDEX_ARRAY.includes(INDEX)
+                    const INCLUDED: boolean = DYNAMIC_HEADER_INDEX_ARRAY.includes(INDEX)
 
                     if (INCLUDED) {
-                        const key = DYNAMIC_HEADER_OBJ[index];
-                        const TO_NUMBER = HEADERS_TO_FORMAT_TO_NUMBER.includes(key)
+                        const HEADER_KEY = DYNAMIC_HEADER_OBJ[index];
+                        const TO_NUMBER = HEADERS_TO_FORMAT_TO_NUMBER.includes(HEADER_KEY)
 
                         if (TO_NUMBER) {
-                            (dev as any)[key] = Number(data);
+                            tempDevice[HEADER_KEY] = Number(value);
                         } else {
-                            (dev as any)[key] = data;
+                            tempDevice[HEADER_KEY] = value;
                         }
                     }
                 })
 
 
+                // const updateDevice: Device = get().setGroupAndNumber_NAC_ONLY_FOR_NOW(tempDevice);
+                // newDeviceMap[updateDevice.HANDLE] = updateDevice;
+                
+                
+                newDeviceMap[tempDevice.HANDLE] = tempDevice;
 
-                //!Might Need to be refactored
-                const updateDevice: Device = get().setGroupAndNumber_NAC_ONLY_FOR_NOW(dev.NACTAG, dev.SPEAKTAG, dev);
 
-                //add object to Device map by the handle here
             }
-
         })
 
+
+        // update the store with the parsed devices
+        set({ deviceMap: newDeviceMap });
 
         return;
     },
@@ -124,19 +129,21 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
 
     },
 
-    setGroupAndNumber_NAC_ONLY_FOR_NOW(NACTAG: string, SPEAKTAG: string, Dev: Device): Device {
+    setGroupAndNumber_NAC_ONLY_FOR_NOW(device: Partial<Device>): Device {
         const regex = /:([A-Z])(\d+)-(\d+)/;
+        const NACTAG = device.NACTAG ?? "";
+        const SPEAKTAG = device.SPEAKTAG ?? "";
+
         const NAC_REGEX = NACTAG.match(regex);
 
-        if (NACTAG === "<>" && SPEAKTAG === "<>") return Dev;
+        if (NACTAG === "<>" && SPEAKTAG === "<>") return device as Device;
 
         if (NAC_REGEX) {
-            Dev.NacGroup = Number(NAC_REGEX[2])
-            Dev.NacNumber = Number(NAC_REGEX[3])
+            (device as any).NacGroup = Number(NAC_REGEX[2])
+            (device as any).NacNumber = Number(NAC_REGEX[3])
         }
         //!ADD SPEAKER AND IDNET LATER
-        return Dev;
-
+        return device as Device;
     }
 
 }))
