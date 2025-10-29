@@ -2,6 +2,7 @@
 
 import Canvas from "@/components/Canvas.tsx";
 import useDeviceStore from '../store/deviceStore.ts'
+import TempTable from "@/components/TempTable.tsx";
 
 export default function HomePage() {
 
@@ -38,12 +39,13 @@ export default function HomePage() {
     <main style={styleSection.main}>
       <section style={styleSection.canvas}>
         
-        <input onChange={handleFileUpload} type="file" name="textFile" id="input" placeholder='.txt files only' />
-        <button onClick={()=> {console.log(devices); console.log(viewport)}}>TEST PRINT</button>
-        
-        {/* <Canvas /> */}
+        {/* <input onChange={handleFileUpload} type="file" name="textFile" id="input" placeholder='.txt files only' />
+        <button onClick={()=> {console.log(devices); console.log(viewport)}}>TEST PRINT</button> */}
+
+        <Canvas />
       </section>
       <section style={styleSection.table}>
+        <TempTable/>
 
       </section>
 

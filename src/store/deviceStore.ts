@@ -26,6 +26,13 @@ export interface Device {
 interface DeviceState {
     deviceMap: DeviceMap;
     viewport: Viewport;
+
+    //!Temp for testing 
+    tempDeviceMap: DeviceMap;
+    addTempDeviceMap(HANDLE: string): void;
+    //!Temp for testing 
+
+
     setDeviceMap(DeviceMap: DeviceMap): void;
     setViewport(newViewport: Viewport): void;
     handleFileUpload: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -37,6 +44,7 @@ interface DeviceState {
 const useDeviceStore = create<DeviceState>((set, get) => ({
     deviceMap: new Map<string, Device>(),
     viewport: {},
+    tempDeviceMap: new Map<string, Device>(),
 
     setDeviceMap: (newDeviceMap) => set({ deviceMap: newDeviceMap }),
     setViewport: (newViewport) => {
@@ -52,6 +60,17 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
         set({ viewport: newViewport }
         )
     },
+
+    //! TEMP FOR TESTING
+    addTempDeviceMap: (HANDLE) => set((state) => {
+        const device = state.deviceMap.get(HANDLE);
+        if (!device) {
+            // error no change
+            return { tempDeviceMap: new Map(state.tempDeviceMap) };
+        }
+        return { tempDeviceMap: new Map(state.tempDeviceMap).set(HANDLE, device) };
+    }),
+
 
     handleFileUpload(event) {
         const selectedFile = event.target.files?.[0];

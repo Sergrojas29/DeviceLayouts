@@ -35,11 +35,38 @@ body{
 
 .svgContainer{
 
-  padding: 100;
+  padding: 50;
   overflow: visible;
   background-color: azure;
 }
 
+.device {
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+/* When you hover over the whole group */
+.device:hover line,
+.device:hover rect,
+.device:hover circle,
+.device:hover polygon {
+  stroke: #00ff88;         /* neon green glow */
+  fill: #00ff88;           /* for the polygon */
+  filter: drop-shadow(0 0 6px #00ff88);
+  transform: scale(1);
+  transition: all 0.25s ease-in-out;
+}
+
+/* Optional: subtle pulsing effect */
+@keyframes pulse {
+  0% { filter: drop-shadow(0 0 4px #00ff88); }
+  50% { filter: drop-shadow(0 0 10px #00ff88); }
+  100% { filter: drop-shadow(0 0 4px #00ff88); }
+}
+
+.device:hover {
+  animation: pulse 1.2s infinite alternate;
+}
 
 /* .container {
   

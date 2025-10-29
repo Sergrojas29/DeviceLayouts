@@ -1,3 +1,5 @@
+import useDeviceStore from '../../store/deviceStore.ts'
+
 interface SpeakerStrobeProps {
     color: string;
     X: number;
@@ -8,6 +10,9 @@ interface SpeakerStrobeProps {
 }
 
 export function SpeakerStrobe({handle, color, X, Y, scale = 1 }: SpeakerStrobeProps) {
+
+    const addTempDevice = useDeviceStore((state)=> state.addTempDeviceMap)
+
 
     const UNIT = 10 * scale;
     const SIZE = UNIT * 2.5;
@@ -28,7 +33,7 @@ export function SpeakerStrobe({handle, color, X, Y, scale = 1 }: SpeakerStrobePr
 
     return (
 
-        <g onClick={()=> {console.log(handle)}}>
+        <g className='device' onClick={()=> {addTempDevice(handle)}}>
             <line x1={X - UNIT} y1={Y - UNIT} x2={X + UNIT} y2={Y + UNIT} style={Strobestyle.st0} />
             <line x1={X + UNIT} y1={Y - UNIT} x2={X - UNIT} y2={Y + UNIT} style={Strobestyle.st0}/>
             <rect x={X - HALF} y={Y - HALF} width={SIZE} height={SIZE}    style={Strobestyle.st0}/>
