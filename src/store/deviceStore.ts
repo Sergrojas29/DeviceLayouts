@@ -136,7 +136,7 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
 
 
         data.forEach((line, index) => {
-            const PARSED_LINE = line.trim().split(/r?\t/)
+            const PARSED_LINE = line.trim().split(/\r?\t/)
 
 
             //@ts-ignore
