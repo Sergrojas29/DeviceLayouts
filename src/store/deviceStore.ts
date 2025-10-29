@@ -1,26 +1,57 @@
 
 import { create } from 'zustand';
-import { Device } from '../app/utils/readData.ts';
 import { ChangeEvent } from 'react';
 
 
 
-export type DeviceMap = Record<string, Device>;
+export type DeviceMap = Map<string, Device>;
+export type Viewport = Record<string, number>;
+export interface Device {
+    HANDLE: string;
+    PID: string;
+    CD: number;
+    WP: string;
+    NACTAG: string;
+    DESCRIPTION: string;
+    X_COORDINATE: number;
+    Y_COORDINATE: number;
+    CEIL: string;
+    SPEAKTAG: string;
+    WATT: string;
+    //! FOR MANIPLULATION
+    NacGroup: number;
+    NacNumber: number;
+}
 
 interface DeviceState {
     deviceMap: DeviceMap;
+    viewport: Viewport;
     setDeviceMap(DeviceMap: DeviceMap): void;
+    setViewport(newViewport: Viewport): void;
     handleFileUpload: (event: ChangeEvent<HTMLInputElement>) => void;
     parseData: (fileContent: string) => void;
-    setGroupAndNumber_NAC_ONLY_FOR_NOW(NACTAG : string , SPEAKTAG : string , Dev: Device): Device;
-
+    setGroupAndNumber_NAC_ONLY_FOR_NOW(Dev: Device): Device;
+    compare(device: Device, viewport: Viewport): void;
 }
 
 const useDeviceStore = create<DeviceState>((set, get) => ({
-    deviceMap: {},
+    deviceMap: new Map<string, Device>(),
+    viewport: {},
 
-    setDeviceMap: (newDeviceMap) => set({ deviceMap: newDeviceMap }), // Shouldn't add devices after being set
+    setDeviceMap: (newDeviceMap) => set({ deviceMap: newDeviceMap }),
+    setViewport: (newViewport) => {
+        const YMAX = newViewport.yMax;
+        const YMIN = newViewport.yMin;
 
+        const XMAX = newViewport.xMax;
+        const XMIN = newViewport.xMin;
+
+        newViewport.height = YMAX - YMIN;
+        newViewport.width = XMAX - XMIN;
+
+        set({ viewport: newViewport }
+        )
+    },
 
     handleFileUpload(event) {
         const selectedFile = event.target.files?.[0];
@@ -35,8 +66,18 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
         }
     },
     parseData(stringData) {
+        const newDeviceMap: DeviceMap = new Map<string, Device>();
+        const newViewport: Viewport = {
+            width: 0,
+            height: 0,
+            xMax: Number.MIN_SAFE_INTEGER,
+            xMin: Number.MAX_SAFE_INTEGER,
+            yMax: Number.MIN_SAFE_INTEGER,
+            yMin: Number.MAX_SAFE_INTEGER,
+        }
+
+
         const data = stringData.split(/\r?\n/).filter(line => line.trim() !== '');
-        const newDeviceMap: DeviceMap = {};
 
         //!HEADER EDIT LATER AS EDIT THE INTERFACE
         const header: string[] = [
@@ -59,83 +100,86 @@ const useDeviceStore = create<DeviceState>((set, get) => ({
             'Y_COORDINATE',
         ];
 
-        const DYNAMIC_HEADER_OBJ: { [key: number]: string } = {}
+        const DYNAMIC_HEADER_OBJ: Record<number, string> = {}
+
+
+        const firstLine = data.shift();
+        if (!firstLine) return;
+        const HEADERS: string[] = firstLine.split(/\r?\t/);
+
+        HEADERS.forEach((headerValue: string, i: number) => {
+            const INCLUDED_HEADERS: boolean = header.includes(headerValue)
+            if (INCLUDED_HEADERS) {
+
+                DYNAMIC_HEADER_OBJ[i] = headerValue
+            }
+        })
 
 
         data.forEach((line, index) => {
             const PARSED_LINE = line.trim().split(/r?\t/)
 
 
-            //!GET HEADER INDEX
-            if (index == 0) {
-                const LENGTH = PARSED_LINE.length
+            //@ts-ignore
+            let tempDevice: Device = {};
+            const DYANMIC_HEADER_INDEX_ARRAY = Object.keys(DYNAMIC_HEADER_OBJ)
 
-                for (let i = 0; i < LENGTH; i++) {
+            PARSED_LINE.forEach((data, index) => {
+                const INDEX = String(index)
+                const INCLUDED: boolean = DYANMIC_HEADER_INDEX_ARRAY.includes(INDEX)
 
-                    const HEADER_VALUE = PARSED_LINE[i]
-                    const INCLUDED_HEADERS: boolean = header.includes(HEADER_VALUE)
+                if (INCLUDED) {
+                    const key = DYNAMIC_HEADER_OBJ[index];
+                    const TO_NUMBER = HEADERS_TO_FORMAT_TO_NUMBER.includes(key)
 
-                    if (INCLUDED_HEADERS) {
-                        DYNAMIC_HEADER_OBJ[i] = HEADER_VALUE
+                    if (TO_NUMBER) {
+                        (tempDevice as any)[key] = Number(data);
+                    } else {
+                        (tempDevice as any)[key] = data;
                     }
                 }
-            } else {
-
-                //@ts-ignore
-                let dev: Device = {};
-                const DYANMIC_HEADER_INDEX_ARRAY = Object.keys(DYNAMIC_HEADER_OBJ)
-
-                PARSED_LINE.forEach((data, index) => {
-                    const INDEX = String(index)
-                    const INCLUDED: boolean = DYANMIC_HEADER_INDEX_ARRAY.includes(INDEX)
-
-                    if (INCLUDED) {
-                        const key = DYNAMIC_HEADER_OBJ[index];
-                        const TO_NUMBER = HEADERS_TO_FORMAT_TO_NUMBER.includes(key)
-
-                        if (TO_NUMBER) {
-                            (dev as any)[key] = Number(data);
-                        } else {
-                            (dev as any)[key] = data;
-                        }
-                    }
-                })
+            })
+            newDeviceMap.set((tempDevice.HANDLE as string), tempDevice);
+            get().compare(tempDevice, newViewport)
 
 
 
-                //!Might Need to be refactored
-                const updateDevice: Device = get().setGroupAndNumber_NAC_ONLY_FOR_NOW(dev.NACTAG, dev.SPEAKTAG, dev);
-
-                //add object to Device map by the handle here
-            }
 
         })
 
 
+
+        get().setDeviceMap(newDeviceMap);
+        get().setViewport(newViewport);
         return;
     },
-    compare(xValue: number, yValue: number): void {
-
-
+    compare(device, viewport) {
+        const xValue = device.X_COORDINATE
+        const yValue = device.Y_COORDINATE
+        viewport.xMax = Math.max(xValue, viewport.xMax)
+        viewport.xMin = Math.min(xValue, viewport.xMin)
+        viewport.yMax = Math.max(yValue, viewport.yMax)
+        viewport.yMin = Math.min(yValue, viewport.yMin)
     },
 
-    setViewport(): void {
 
 
-    },
-
-    setGroupAndNumber_NAC_ONLY_FOR_NOW(NACTAG: string, SPEAKTAG: string, Dev: Device): Device {
+    setGroupAndNumber_NAC_ONLY_FOR_NOW(device: Device): Device {
         const regex = /:([A-Z])(\d+)-(\d+)/;
+        const NACTAG = device.NACTAG;
+        const SPEAKTAG = device.SPEAKTAG
+
+
         const NAC_REGEX = NACTAG.match(regex);
 
-        if (NACTAG === "<>" && SPEAKTAG === "<>") return Dev;
+        if (NACTAG === "<>" && SPEAKTAG === "<>") return device;
 
         if (NAC_REGEX) {
-            Dev.NacGroup = Number(NAC_REGEX[2])
-            Dev.NacNumber = Number(NAC_REGEX[3])
+            device.NacGroup = Number(NAC_REGEX[2])
+            device.NacNumber = Number(NAC_REGEX[3])
         }
         //!ADD SPEAKER AND IDNET LATER
-        return Dev;
+        return device;
 
     }
 

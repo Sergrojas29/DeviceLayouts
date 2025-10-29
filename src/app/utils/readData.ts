@@ -20,9 +20,7 @@ export interface Device {
     NacNumber: number;
 }
 
-export interface HandleDevice{
-    
-}
+
 
 /**
  * Class Method to handle device data input from a txt file

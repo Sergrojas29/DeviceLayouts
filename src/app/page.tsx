@@ -6,7 +6,7 @@ import useDeviceStore from '../store/deviceStore.ts'
 export default function HomePage() {
 
   const devices = useDeviceStore((state) => state.deviceMap);
-  const setDevices = useDeviceStore((state) => state.setDevices);
+  const viewport = useDeviceStore((state) => state.viewport);
   const handleFileUpload = useDeviceStore((state) => state.handleFileUpload);
 
 
@@ -39,6 +39,7 @@ export default function HomePage() {
       <section style={styleSection.canvas}>
         
         <input onChange={handleFileUpload} type="file" name="textFile" id="input" placeholder='.txt files only' />
+        <button onClick={()=> {console.log(devices); console.log(viewport)}}>TEST PRINT</button>
         
         {/* <Canvas /> */}
       </section>
