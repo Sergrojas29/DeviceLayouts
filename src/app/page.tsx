@@ -2,6 +2,9 @@
 
 import Canvas from "@/components/Canvas.tsx";
 import useDeviceStore from '../store/deviceStore.ts'
+import TempTable from "@/components/TempTable.tsx";
+import { useState } from 'react';
+
 
 export default function HomePage() {
 
@@ -22,8 +25,8 @@ export default function HomePage() {
       height: '100%',
     },
     canvas: {
-      width: '70%',
-      height: '100%', 
+      width: '100%',
+      height: '100%',
       border: 'solid red 1pt'
     },
     table: {
@@ -34,16 +37,24 @@ export default function HomePage() {
   }
 
 
+  const [hide, setHide] = useState<boolean>(false)
+
+  const hideStyle: React.CSSProperties = {
+    width: 0,
+    display: 'none'
+  }
+
   return (
     <main style={styleSection.main}>
       <section style={styleSection.canvas}>
-        
-        <input onChange={handleFileUpload} type="file" name="textFile" id="input" placeholder='.txt files only' />
-        
-        {/* <Canvas /> */}
+
+
+        <button onClick={()=>{setHide(!hide)}}>HIDE</button>
+        <Canvas />
       </section>
-      <section style={styleSection.table}>
-        <TempTable/>
+      <section style={hide ? hideStyle : styleSection.table}>
+        <TempTable />
+        <button onClick={()=>{setHide(!hide)}}>HIDE</button>
 
       </section>
 
