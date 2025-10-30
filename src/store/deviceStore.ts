@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { ChangeEvent } from 'react';
 
-
+const AB_CKT =  2
 
 export type DeviceMap = Map<string, Device>;
 export type Viewport = Record<string, number>;
