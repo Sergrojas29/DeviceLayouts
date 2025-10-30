@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
 import useDeviceStore from '../store/deviceStore.ts'
+import DeviceCard from '../components/DeviceCard.tsx';
+
 
 
 export default function TempTable() {
@@ -27,7 +29,8 @@ export default function TempTable() {
     return (
         <div >
             {tempDevice.size !== 0 && Array.from(tempDevice, ([key, value]) => (
-                <div onClick={handleAddClick} key={key} data-handle={value.HANDLE}> {value.HANDLE}</div>
+                <DeviceCard device={value} />
+                // <div onClick={handleAddClick} key={key} data-handle={value.HANDLE}> {value.HANDLE}</div>
             ))}
             
             <div>TempTable</div>
