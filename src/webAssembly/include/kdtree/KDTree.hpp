@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 
+
 namespace kdtree
 {
 
@@ -10,16 +11,16 @@ namespace kdtree
     {
     public:
         NodePtr root;
-        std::size_t dimensions;
-        std::size_t count;
+        std::size_t dimensions_;
+        std::size_t count_;
 
         explicit KDTree(std::size_t dimensions);
 
         void insert(Point p);
-        void search(Point& target);
+    //     void search(Point& target);
 
-    private:
-        void insertHelper(NodePtr& current, Point p, std::size_t depth)    
+    // private:
+    //     void insertHelper(NodePtr& current, Point p, std::size_t depth);    
     
 
     };

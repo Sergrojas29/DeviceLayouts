@@ -1,29 +1,20 @@
-#include "KDTree.h"
-
-KDTree::KDTree(){
-    root = NULL;
-    test= "it worked";
-}
+#include "kdtree/kdtree.hpp"
 
 
-std::unique_ptr<node> KDTree::initialize_point(std::string handel, float x_coordinate, float y_coordinate){
-    std::unique_ptr<node> point;
-    point->HANDEL = handel;
-    point->x = x_coordinate;
-    point->y = y_coordinate;
-    return point;
-};
+namespace kdtree{
 
-void KDTree::insert(std::unique_ptr<node> point){
-    return ;
-};
+    KDTree::KDTree(std::size_t dimensions)
+        :root(nullptr), dimensions_(dimensions), count_(0)
+    {
+    };
 
-float KDTree::get_euclidan_distance(std::unique_ptr<node> current_node, std::unique_ptr<node> new_node){
-    return 1.0f;
-};
+    void KDTree::insert(Point p){
+        //BASECASE
+        if(root== nullptr){
+            root = std::make_unique<Node>(std::move(p));
+        };
+    }
 
-std::unique_ptr<node> KDTree::get_nearest_neighbor(){
-    std::unique_ptr<node> point;
-    
-    return point; 
-}
+
+
+};// namespace kdtree
