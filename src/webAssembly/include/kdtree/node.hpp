@@ -7,7 +7,7 @@
 namespace kdtree
 {
 
-    template <typename T, size_t K>  // ← Use size_t without std::
+    template <typename T, size_t K>  
     using Point = std::array<T, K>;
     
     template <typename T, size_t K>
