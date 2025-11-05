@@ -1,4 +1,7 @@
 ##KDTree File Structure
+
+
+
 ```
 kdtree/
 ├── CMakeLists.txt
@@ -29,5 +32,17 @@ kdtree/
 │
 └── benchmarks/                 
     └── benchmark_kdtree.cpp
+
+```
+
+
+```
+Creat and build
+
+mkdir build
+cmake ..
+cmake --build .
+
+
 
 ```

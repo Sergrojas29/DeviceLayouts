@@ -2,6 +2,9 @@
 #include "node.hpp"
 #include <vector>
 #include <memory>
+#include <iostream>
+#include <print>
+#include <optional>
 
 
 namespace kdtree
@@ -17,14 +20,16 @@ namespace kdtree
         explicit KDTree(std::size_t dimensions);
 
         void insert(Point p);
-        // void search(Point P); 
-
+        std::optional<Point> findNearestNeighbor(const Point& target) const;
         void print();
+        
+        
+        private:
+        void insertHelper(NodePtr& current, Point p, std::size_t depth);
+        void printHelper(NodePtr& current, std::size_t depth, std::string LeftOrRight);   
+        void findNearestNeighborHelper(const Point& target) const;
 
-        void insertRecursive(NodePtr& current, Point p, std::size_t depth);
-
-    private:
-        void insertHelper(NodePtr& current, Point p, std::size_t depth);    
+        float distance(Point& current ,const Point& target);
         std::size_t getAxis(std::size_t depth)const;
 
     };

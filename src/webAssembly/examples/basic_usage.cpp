@@ -1,13 +1,29 @@
 #include "kdtree/kdtree.hpp"
 #include <iostream>
+#include <vector>
+
 
 int main(int argc, char const *argv[])
 {
     kdtree::KDTree tree(2);
 
-    tree.insert({3.6f, 6.0f});
+    std::vector<float> vec = {};
 
-    std::cout << tree.root.get()->point[0] << "\n";
+    float array[3] = {};
+
+
+    std::vector<kdtree::Point> allPoints = 
+    {{3.0f, 6.0f},{2.0f,7.0f},{17.0f, 15.0f},{6.0f, 12.0f},{13.0f, 15.0f},{9.0f, 1.0f},{10.0f, 19.0f}};
+
+    for (auto &&p : allPoints)
+    {
+        tree.insert(p);
+    }
+
+    tree.print();
+
+
+    
 
 
     return 0;
