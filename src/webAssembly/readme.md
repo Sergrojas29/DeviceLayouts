@@ -11,6 +11,7 @@ kdtree/
 ├── include/
 │   └── kdtree/
 │       ├── kdtree.hpp          
+│       ├── kdtree.tpp          
 │       ├── node.hpp               
 │       ├── distance.hpp        
 │       
@@ -45,4 +46,11 @@ cmake --build .
 
 
 
+```
+```
+Clear and Rebuild
+cd build
+rm -rf *
+cmake ..
+cmake --build .
 ```

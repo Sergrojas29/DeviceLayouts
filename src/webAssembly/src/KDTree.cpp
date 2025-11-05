@@ -3,9 +3,6 @@
 namespace kdtree
 {
 
-    KDTree::KDTree(std::size_t dimensions)
-        : root(nullptr), dimensions_(dimensions), count_(0) {
-          };
 
     void KDTree::insert(Point p)
     {
