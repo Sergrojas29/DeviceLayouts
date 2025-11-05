@@ -7,7 +7,7 @@ int main(int argc, char const *argv[])
 
     tree.insert({3.6f, 6.0f});
 
-    std::cout << tree->root << "\n";
+    std::cout << tree.root.get()->point[0] << "\n";
 
 
     return 0;

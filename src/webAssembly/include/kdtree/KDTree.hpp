@@ -17,11 +17,15 @@ namespace kdtree
         explicit KDTree(std::size_t dimensions);
 
         void insert(Point p);
-    //     void search(Point& target);
+        // void search(Point P); 
 
-    // private:
-    //     void insertHelper(NodePtr& current, Point p, std::size_t depth);    
-    
+        void print();
+
+        void insertRecursive(NodePtr& current, Point p, std::size_t depth);
+
+    private:
+        void insertHelper(NodePtr& current, Point p, std::size_t depth);    
+        std::size_t getAxis(std::size_t depth)const;
 
     };
 
