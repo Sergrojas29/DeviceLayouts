@@ -2,6 +2,7 @@
 namespace kdtree
 {
     
+
     template <typename T, size_t K>
     void KDTree<T, K>::insert(typename KDTree<T, K>::Point p)
     {
@@ -60,6 +61,18 @@ namespace kdtree
         
         printHelper(current->left, depth + 1, "Left");
         printHelper(current->right, depth + 1, "Right");
+    }
+
+    template <typename T, size_t K>
+    std::optional<typename KDTree<T, K>::Point> KDTree<T, K>::findNearestNeighbor(const typename KDTree<T, K>::Point& target) const
+    {
+        // placeholder implementation: no nearest neighbor found
+        return std::nullopt;
+    }
+    
+    template <typename T, size_t K>
+    void <typename KDTree<T, K>::Point> KDTree<T, K>::findNearestNeighborHelper(const typename KDTree<T, K>::Point& target){
+
     }
 
 } // namespace kdtree
