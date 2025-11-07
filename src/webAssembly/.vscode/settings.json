@@ -54,6 +54,12 @@
         "xutility": "cpp",
         "array": "cpp",
         "span": "cpp",
-        "print": "cpp"
-    }
+        "print": "cpp",
+        "*.tpp": "cpp",
+        "*.hpp": "cpp",
+        "*.h": "cpp",
+    },
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.intelliSenseEngine": "default",
+    "editor.formatOnSave": false
 }

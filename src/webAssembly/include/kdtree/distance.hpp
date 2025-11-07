@@ -1,19 +1,31 @@
 #pragma once
-#include "node.hpp"
-#include <cmath>
+#include <array>
 #include <cstddef>
+#include <cmath>
 
 namespace kdtree
 {
-    template <typename T, size_t K>
-    double  euclideanDistance(const Point<T, K> &a, const Point<T, K> &b);
+    /**
+     * @brief d = √((x₂ - x₁)² + (y₂ - y₁)² + ... + (n₂ - n₁)²)
+     */
+    template <typename T, std::size_t K>
+    double euclideanDistance(const std::array<T, K> &a, const std::array<T, K> &b);
 
-    template <typename T, size_t K>
-    double  squaredEuclideanDistance(const Point<T, K> &a, const Point<T, K> &b);
+    /**
+     * @brief d = (x₂ - x₁)² + (y₂ - y₁)² + ... + (n₂ - n₁)²
+     * 
+     */
+    template <typename T, std::size_t K>
+    double squaredEuclideanDistance(const std::array<T, K> &a, const std::array<T, K> &b);
 
-    // Manhattan distance: |x₁-x₂| + |y₁-y₂| + ...
-    template <typename T, size_t K>
-    double  manhattanDistance(const Point<T, K> &a, const Point<T, K> &b);
+    /**
+     *  @brief Manhattan distance: |x₁-x₂| + |y₁-y₂| + ...+ |n₁-n₂|
+     *  
+     */
+    template <typename T, std::size_t K>
+    T manhattanDistance(const std::array<T, K> &a, const std::array<T, K> &b);
 
 } // namespace kdtree
+
+
 #include "distance.tpp"

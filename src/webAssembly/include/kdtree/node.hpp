@@ -2,15 +2,14 @@
 #pragma once
 #include <array>
 #include <memory>
-#include <cstddef>
 
 namespace kdtree
 {
 
-    template <typename T, size_t K>  
+    template <typename T, std::size_t K>  
     using Point = std::array<T, K>;
     
-    template <typename T, size_t K>
+    template <typename T, std::size_t K>
     struct Node
     {
         Point<T, K> point;
@@ -21,7 +20,8 @@ namespace kdtree
             : point(std::move(p)), left(nullptr), right(nullptr) {}
     };
     
-    template <typename T, size_t K>
+    
+    template <typename T, std::size_t K>
     using NodePtr = std::unique_ptr<Node<T, K>>;
 
 } // namespace kdtree
