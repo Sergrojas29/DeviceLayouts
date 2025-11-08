@@ -24,7 +24,7 @@ namespace kdtree
 
         //Implemation Need
         std::optional<Point> findNearestNeighbor(const Point& target) const;
-        void findNearestNeighborHelper(const Point& target, const NodePtr& current, Point& best, std::size_t depth  )const;
+        void findNearestNeighborHelper(const Point &target, const NodePtr &current, double &bestDistanceSqrd, Point &bestPoint, std::size_t depth)const;
         
         
         void print();

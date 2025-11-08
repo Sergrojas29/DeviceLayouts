@@ -1,9 +1,10 @@
 #include "kdtree/kdtree.hpp"
+#include "kdtree/distance.hpp"
 #include <iostream>
 #include <vector>
 
 
-int main(int argc, char const *argv[])
+int main()
 {
     
     kdtree::KDTree tree;

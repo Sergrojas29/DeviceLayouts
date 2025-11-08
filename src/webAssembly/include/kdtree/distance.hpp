@@ -1,4 +1,5 @@
 #pragma once
+#include "node.hpp"
 #include <cmath>
 
 namespace kdtree
@@ -14,10 +15,6 @@ namespace kdtree
      */
     double squaredEuclideanDistance(const Point &a, const Point &b);
 
-    /**
-     *  @brief Manhattan distance: |x₁-x₂| + |y₁-y₂| + ...+ |n₁-n₂|
-     *  
-     */
     double manhattanDistance(const Point &a, const Point &b);
 
 } // namespace kdtree

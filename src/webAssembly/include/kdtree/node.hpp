@@ -4,7 +4,7 @@
 
 namespace kdtree
 {
-
+    //! 2D tree Right now!!!!!!!!
     using Point = std::array<float, 2>;
     
     struct Node

@@ -17,9 +17,10 @@ kdtree/
 │       
 │
 ├── src/                        
-│   └── kdtree.cpp              
+│   └── kdtree.cpp
+│   └── distance.cpp                
 │
-├── tests/
+├── tests/ 
 │   ├── CMakeLists.txt
 │   ├── test_main.cpp
 │   ├── test_kdtree.cpp
