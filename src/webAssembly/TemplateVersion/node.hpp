@@ -1,3 +1,4 @@
+
 #pragma once
 #include <array>
 #include <memory>
@@ -5,19 +6,22 @@
 namespace kdtree
 {
 
-    using Point = std::array<float, 2>;
+    template <typename T, std::size_t K>  
+    using Point = std::array<T, K>;
     
+    template <typename T, std::size_t K>
     struct Node
     {
-        Point point;
+        Point<T, K> point;
         std::unique_ptr<Node> left;
         std::unique_ptr<Node> right;
         
-        explicit Node(Point p)
+        explicit Node(Point<T, K> p)
             : point(std::move(p)), left(nullptr), right(nullptr) {}
     };
     
     
-    using NodePtr = std::unique_ptr<Node>;
+    template <typename T, std::size_t K>
+    using NodePtr = std::unique_ptr<Node<T, K>>;
 
 } // namespace kdtree

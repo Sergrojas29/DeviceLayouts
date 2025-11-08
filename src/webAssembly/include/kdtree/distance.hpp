@@ -1,19 +1,24 @@
 #pragma once
-#include "node.hpp"
 #include <cmath>
-#include <cstddef>
 
 namespace kdtree
 {
-    template <typename T, size_t K>
-    double  euclideanDistance(const Point<T, K> &a, const Point<T, K> &b);
+    /**
+     * @brief d = √((x₂ - x₁)² + (y₂ - y₁)² + ... + (n₂ - n₁)²)
+     */
+    double euclideanDistance(const Point &a, const Point &b);
 
-    template <typename T, size_t K>
-    double  squaredEuclideanDistance(const Point<T, K> &a, const Point<T, K> &b);
+    /**
+     * @brief d = (x₂ - x₁)² + (y₂ - y₁)² + ... + (n₂ - n₁)²
+     * 
+     */
+    double squaredEuclideanDistance(const Point &a, const Point &b);
 
-    // Manhattan distance: |x₁-x₂| + |y₁-y₂| + ...
-    template <typename T, size_t K>
-    double  manhattanDistance(const Point<T, K> &a, const Point<T, K> &b);
+    /**
+     *  @brief Manhattan distance: |x₁-x₂| + |y₁-y₂| + ...+ |n₁-n₂|
+     *  
+     */
+    double manhattanDistance(const Point &a, const Point &b);
 
 } // namespace kdtree
-#include "distance.tpp"
+

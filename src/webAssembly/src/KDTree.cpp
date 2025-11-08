@@ -2,8 +2,6 @@
 
 namespace kdtree
 {
-
-
     void KDTree::insert(Point p)
     {
         insertHelper(root, std::move(p), 0);
@@ -31,10 +29,10 @@ namespace kdtree
     }
 
     void KDTree::print(){
-        printHelper(root, 0, "");
+        printHelper(root, 0, "Root");
     }
 
-    void KDTree::printHelper(NodePtr& current, std::size_t depth, std::string LeftOrRight){
+    void KDTree::printHelper(const NodePtr& current, std::size_t depth, std::string LeftOrRight){
         if(current == nullptr) return;
 
         std::print("Depth: {} ", depth);
@@ -51,21 +49,35 @@ namespace kdtree
         printHelper(current->right, depth, "Right");
     };
 
+
+
     std::optional<Point> KDTree::findNearestNeighbor(const Point& target)const{
         if(root == nullptr) return std::nullopt;
-        Point best = root->point;
-        return best;
+
+        std::size_t depth = 0;
+        Point Best = root->point;
+
+        double best_distance = squaredEuclideanDistance(target ,Best);
+
+        findNearestNeighborHelper(target, root, Best, depth);
+        return Best;
+    }
+
+    void KDTree::findNearestNeighborHelper(const Point& target, const NodePtr& current, Point& best, std::size_t depth )const{
+
+        std::size_t axis = getAxis(depth);
+        ++depth;
+
+        double distance_current = 
+        if(target)
+
+
+
+
+
+        
     }
 
 
-
-    float KDTree::distance(Point& current ,const Point& target){
-
-    }
-
-    std::size_t KDTree::getAxis(std::size_t depth) const
-    {
-        return depth % dimensions_;
-    }
 
 }; // namespace kdtree
